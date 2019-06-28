@@ -1,0 +1,22 @@
+CREATE VIEW all_wdi_data AS 
+SELECT 
+t.Topic, 
+i.`Indicator.Name`, 
+i.format, 
+i.order_transform_number, 
+i.order_transform_label, 
+c.`Short.Name`, 
+c.ISO_code, 
+c.`Currency.Unit`, 
+v.year, 
+v.indicator_value 
+FROM 
+WDI_Yearly_Values v 
+INNER JOIN 
+WDI_Indicators i 
+ON v.indicator_id = i.id 
+INNER JOIN WDI_Topics t 
+ON i.topic_id = t.id 
+INNER JOIN 
+WDI_Countries c 
+ON v.country_id = c.id AND v.indicator_id = i.id;
