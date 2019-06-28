@@ -12,6 +12,23 @@ details <-  read.csv("C:\\Users\\Administrator\\Documents\\personal website\\WDI
 countries <- read.csv("C:\\Users\\Administrator\\Documents\\personal website\\WDI data bulk\\raw files\\WDI_csv\\WDICountry.csv",
                       stringsAsFactors = FALSE)
 
+#### find formats ####
+
+indicator_formats <- main_data %>% 
+  group_by(Indicator.Name) %>% 
+  summarise(avg_value = mean(X2016, na.rm = TRUE)) %>% 
+  mutate(digit_count = nchar(trunc(abs(avg_value))),
+         order_transform_number = ifelse(digit_count >= 10, 1/1000000000,
+                                         ifelse(digit_count >= 7, 1/1000000,
+                                                1)),
+         order_transform_label = ifelse(digit_count >= 10, 'Billion',
+                                        ifelse(digit_count >= 7, 'Million',
+                                               '')),
+         parens = str_extract(Indicator.Name, pattern = '\\(.+\\)$'),
+         format = ifelse(grepl(pattern = '%', x = parens), '%',
+                         ifelse(grepl(pattern = '\\$', x = parens), '$', NA))) %>% 
+  dplyr::select(Indicator.Name, format, order_transform_number, order_transform_label)
+
 #### clean details ####
 
 indicators <- details %>% 
