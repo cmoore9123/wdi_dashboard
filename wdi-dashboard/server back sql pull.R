@@ -8,7 +8,7 @@ library(sf)
 library(DT)
 library(RMySQL)
 
-con <- dbConnect(MySQL(), user='wordpressuser', password='Bitsy444', dbname='dataconductor', host='localhost')
+con <- dbConnect(MySQL(), user='wordpressuser', password='xxx', dbname='dataconductor', host='localhost')
 
 sp_world <- spData::world
 sp_world[match(c('France'), sp_world$name_long),1] <- 'FR'
